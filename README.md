@@ -27,3 +27,9 @@ Please follow the [GDScript Style Guide](https://docs.godotengine.org/en/3.0/get
 
 # Why did you make Whiskers?
 There are lots of awesome Dialogue creation tools out there, but I like a good challenge! Creating this tool taught me a *lot* about Godot. Having created my own solution also means that I can add new Features much quicker than if I was using a third-party one!
+
+# Fork additions and changes
+#### Changes:
+* Code generalization (should make it easier to add new nodes)
+* Output structure
+![Media](/output_structure.png)
