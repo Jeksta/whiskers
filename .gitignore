@@ -5,3 +5,6 @@ export_presets.cfg
 *.import
 /Test Dialogue/
 .gitignore
+
+# 
+*.json
