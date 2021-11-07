@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=1]
 [ext_resource path="res://Assets/Themes/Nodes/Selected/ExpressionSelected.tres" type="StyleBox" id=2]
-[ext_resource path="res://Scripts/GraphNode.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Nodes/ExpressionNode.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Themes/Nodes/Normal/line.tres" type="StyleBox" id=4]
 
 [node name="Expression" type="GraphNode"]

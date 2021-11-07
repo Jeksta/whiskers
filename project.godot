@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "GraphNode",
+"class": "BaseGraphNode",
+"language": "GDScript",
+"path": "res://Scripts/Nodes/BaseGraphNode.gd"
+}, {
 "base": "Reference",
 "class": "WhiskersParser",
 "language": "GDScript",
 "path": "res://Scripts/WhiskersParser.gd"
 } ]
 _global_script_class_icons={
+"BaseGraphNode": "",
 "WhiskersParser": ""
 }
 
@@ -31,7 +37,10 @@ config/icon="res://icon.png"
 [autoload]
 
 EditorSingleton="*res://Scripts/EditorSingleton.gd"
-DemoSingleton="*res://Scripts/DemoSingleton.gd"
+
+[debug]
+
+settings/fps/force_fps=25
 
 [input]
 
@@ -104,6 +113,10 @@ redo={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":89,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[physics]
+
+common/physics_fps=25
 
 [rendering]
 

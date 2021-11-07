@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/Themes/Nodes/Normal/Dialogue.tres" type="StyleBox" id=1]
 [ext_resource path="res://Assets/Themes/Nodes/Selected/DialogueSelected.tres" type="StyleBox" id=2]
-[ext_resource path="res://Scripts/GraphNode.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Nodes/DialogueNode.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Themes/Nodes/Normal/line.tres" type="StyleBox" id=4]
 
 [node name="Dialogue" type="GraphNode"]
@@ -29,6 +29,9 @@ slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Lines" type="VBoxContainer" parent="."]
 margin_left = 10.0

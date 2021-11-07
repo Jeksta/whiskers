@@ -18,8 +18,6 @@ func _on_LineEdit_text_changed(new_text):
 				val = false
 			if(get_node('/root/PlayerSingleton')):
 				get_node('/root/PlayerSingleton').set(get_node(".").get_child(i).name, val)
-			else:
-				DemoSingleton.set(get_node(".").get_child(i).name, val)
 
 func _physics_process(delta):
 	if (!isFocused) and (!loadingData):
@@ -27,8 +25,6 @@ func _physics_process(delta):
 		for i in range(1, items):
 			if EditorSingleton.has_player_singleton:
 				get_node(".").get_child(i).get_child(1).set_text(str(get_node('/root/PlayerSingleton').get(get_node(".").get_child(i).name)))
-			else:
-				get_node(".").get_child(i).get_child(1).set_text(str(DemoSingleton.get(get_node(".").get_child(i).name)))
 	
 	if EditorSingleton.has_player_singleton and !EditorSingleton.loaded_player_vars:
 		loadingData = true
@@ -51,15 +47,6 @@ func populate_vars():
 			node.set_name(PlayerSingleton.variables[i])
 			node.hint_tooltip = PlayerSingleton.varTooltips[i]
 			node.get_child(1).set_text(str(PlayerSingleton.get(PlayerSingleton.variables[i])))
-			node.show()
-			get_node(".").add_child(node)
-	else:
-		for i in range(0, DemoSingleton.variables.size()):
-			var node = get_node("item_template").duplicate()
-			node.get_child(0).set_text(DemoSingleton.variables[i])
-			node.set_name(DemoSingleton.variables[i])
-			node.hint_tooltip = DemoSingleton.varTooltips[i]
-			node.get_child(1).set_text(str(DemoSingleton.get(DemoSingleton.variables[i])))
 			node.show()
 			get_node(".").add_child(node)
 	loadingData = false

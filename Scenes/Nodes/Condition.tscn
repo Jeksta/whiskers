@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/Themes/Nodes/Normal/Condition.tres" type="StyleBox" id=1]
 [ext_resource path="res://Assets/Themes/Nodes/Selected/ConditionSelected.tres" type="StyleBox" id=2]
-[ext_resource path="res://Scripts/GraphNode.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Nodes/ConditionNode.gd" type="Script" id=3]
 
 [node name="Condition" type="GraphNode"]
 anchor_left = 0.5
@@ -41,9 +41,11 @@ slot/2/right_enabled = true
 slot/2/right_type = 0
 slot/2/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-editor/display_folded = true
 margin_left = 10.0
 margin_top = 33.0
 margin_right = 163.0
@@ -52,7 +54,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer"]
-editor/display_folded = true
 margin_right = 34.0
 margin_bottom = 14.0
 size_flags_vertical = 0
@@ -63,7 +64,6 @@ margin_bottom = 14.0
 text = "Input"
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="HBoxContainer"]
-editor/display_folded = true
 margin_left = 127.0
 margin_right = 153.0
 margin_bottom = 14.0
@@ -81,16 +81,16 @@ text = "true"
 [node name="HSeparator" type="HSeparator" parent="."]
 visible = false
 margin_left = 10.0
-margin_top = 47.0
+margin_top = 48.0
 margin_right = 163.0
-margin_bottom = 50.0
+margin_bottom = 51.0
 custom_constants/separation = 3
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 margin_left = 10.0
-margin_top = 51.0
+margin_top = 52.0
 margin_right = 163.0
-margin_bottom = 65.0
+margin_bottom = 66.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 

@@ -20,14 +20,6 @@ func populate_funcs():
 			node.get_child(1).set_text(PlayerSingleton.functionDocs[i])
 			node.show()
 			get_node(".").add_child(node)
-	else:
-		for i in range(0, DemoSingleton.functions.size()):
-			var node = get_node("item_template").duplicate()
-			node.get_child(0).set_text(DemoSingleton.functions[i])
-			node.set_name(DemoSingleton.variables[i])
-			node.get_child(1).set_text(DemoSingleton.functionDocs[i])
-			node.show()
-			get_node(".").add_child(node)
 
 func clear_funcs():
 	for i in range(1, get_child_count()):

@@ -22,7 +22,7 @@ var current_history : = 0
 var history_objects = Dictionary()
 var last_save : = 0
 
-var node_names : = ['Dialogue', 'Option', 'Expression', 'Condition', 'Jump', 'End', 'Start', 'Comment']
+var node_names : = ['Dialogue', 'Option', 'Data', 'Expression', 'Condition', 'Jump', 'End', 'Start', 'Comment']
 var has_graph : = false
 
 func get_node_type(name : String):

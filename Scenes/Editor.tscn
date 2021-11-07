@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://Assets/Themes/Dialogs/Dialog.tres" type="Theme" id=1]
 [ext_resource path="res://Assets/Images/logo_transparent.png" type="Texture" id=2]
@@ -23,9 +23,6 @@
 [ext_resource path="res://Assets/Fonts/bold.tres" type="DynamicFont" id=21]
 [ext_resource path="res://Assets/Fonts/regular.tres" type="DynamicFont" id=22]
 [ext_resource path="res://Scripts/Graph.gd" type="Script" id=23]
-[ext_resource path="res://Scripts/DemoGame.gd" type="Script" id=24]
-[ext_resource path="res://Assets/Images/attn.png" type="Texture" id=25]
-[ext_resource path="res://Scenes/Dialogue.tscn" type="PackedScene" id=26]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.121569, 0.145098, 0.192157, 1 )
@@ -185,21 +182,12 @@ VScrollBar/styles/grabber_pressed = ExtResource( 16 )
 VScrollBar/styles/scroll = ExtResource( 17 )
 VScrollBar/styles/scroll_focus = null
 
-[sub_resource type="StyleBoxFlat" id=19]
-bg_color = Color( 0.0980392, 0.113725, 0.152941, 1 )
-
-[sub_resource type="StyleBoxFlat" id=20]
-bg_color = Color( 0.176471, 0.486275, 0.654902, 1 )
-
-[sub_resource type="RectangleShape2D" id=21]
-extents = Vector2( 51.1839, 49.7567 )
-
-[sub_resource type="StyleBoxFlat" id=22]
-bg_color = Color( 0.176471, 0.654902, 0.317647, 1 )
-
 [node name="Editor" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Mount" type="PanelContainer" parent="."]
 anchor_right = 1.0
@@ -226,8 +214,8 @@ window_title = "Save Whiskers Project"
 resizable = true
 access = 2
 filters = PoolStringArray( "*.json; Whiskers JSON File" )
-current_dir = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers"
-current_path = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers/"
+current_dir = "/Programmier Zeugs/Godot/whiskers"
+current_path = "/Programmier Zeugs/Godot/whiskers/"
 
 [node name="Import" type="FileDialog" parent="Mount/Modals"]
 anchor_left = 0.5
@@ -244,8 +232,8 @@ resizable = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.gd; GDScript File" )
-current_dir = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers"
-current_path = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers/"
+current_dir = "/Programmier Zeugs/Godot/whiskers"
+current_path = "/Programmier Zeugs/Godot/whiskers/"
 
 [node name="Open" type="FileDialog" parent="Mount/Modals"]
 anchor_left = 0.5
@@ -262,8 +250,8 @@ resizable = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.json; Whiskers JSON File" )
-current_dir = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers"
-current_path = "/media/sputnik/Data/portfolioStuff/LittleMouseGames/ElectricWhiskers/"
+current_dir = "/Programmier Zeugs/Godot/whiskers"
+current_path = "/Programmier Zeugs/Godot/whiskers/"
 
 [node name="QuitConf" type="ConfirmationDialog" parent="Mount/Modals"]
 anchor_left = 0.5
@@ -771,6 +759,7 @@ margin_bottom = -5.0
 [node name="Basic" type="VSplitContainer" parent="Mount/MainWindow/Editor/Info/Nodes"]
 margin_right = 220.0
 margin_bottom = 129.0
+size_flags_vertical = 3
 dragger_visibility = 2
 
 [node name="Label" type="Label" parent="Mount/MainWindow/Editor/Info/Nodes/Basic"]
@@ -785,7 +774,7 @@ margin_right = 220.0
 margin_bottom = 129.0
 rect_min_size = Vector2( 0, 111 )
 custom_styles/bg = SubResource( 7 )
-items = [ "Dialogue Node", ExtResource( 6 ), false, "Option Node", ExtResource( 7 ), false, "Jump Node", ExtResource( 8 ), false ]
+items = [ "Dialogue Node", ExtResource( 6 ), false, "Option Node", ExtResource( 7 ), false, "Jump Node", ExtResource( 8 ), false, "Data Node", null, false ]
 script = ExtResource( 9 )
 
 [node name="HSeparator" type="HSeparator" parent="Mount/MainWindow/Editor/Info/Nodes"]
@@ -797,8 +786,12 @@ custom_styles/separator = SubResource( 8 )
 [node name="Advanced" type="VSplitContainer" parent="Mount/MainWindow/Editor/Info/Nodes"]
 margin_top = 141.0
 margin_right = 220.0
-margin_bottom = 224.0
+margin_bottom = 257.0
+size_flags_vertical = 3
 dragger_visibility = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="Mount/MainWindow/Editor/Info/Nodes/Advanced"]
 margin_right = 220.0
@@ -809,22 +802,24 @@ text = "Advanced Nodes"
 [node name="AdvancedNodes" type="ItemList" parent="Mount/MainWindow/Editor/Info/Nodes/Advanced"]
 margin_top = 18.0
 margin_right = 220.0
-margin_bottom = 83.0
+margin_bottom = 116.0
 rect_min_size = Vector2( 0, 65 )
+size_flags_stretch_ratio = 2.0
 custom_styles/bg = SubResource( 7 )
 items = [ "Conditional Node", ExtResource( 10 ), false, "Expression Node", ExtResource( 11 ), false ]
 script = ExtResource( 9 )
 
 [node name="HSeparator2" type="HSeparator" parent="Mount/MainWindow/Editor/Info/Nodes"]
-margin_top = 228.0
+margin_top = 261.0
 margin_right = 220.0
-margin_bottom = 232.0
+margin_bottom = 265.0
 custom_styles/separator = SubResource( 8 )
 
 [node name="Utility Nodes" type="VSplitContainer" parent="Mount/MainWindow/Editor/Info/Nodes"]
-margin_top = 236.0
+margin_top = 269.0
 margin_right = 220.0
-margin_bottom = 341.0
+margin_bottom = 385.0
+size_flags_vertical = 3
 dragger_visibility = 2
 
 [node name="Label" type="Label" parent="Mount/MainWindow/Editor/Info/Nodes/Utility Nodes"]
@@ -836,16 +831,16 @@ text = "Utility Nodes"
 [node name="UtilityNodes" type="ItemList" parent="Mount/MainWindow/Editor/Info/Nodes/Utility Nodes"]
 margin_top = 18.0
 margin_right = 220.0
-margin_bottom = 105.0
+margin_bottom = 116.0
 rect_min_size = Vector2( 0, 87 )
 custom_styles/bg = SubResource( 7 )
 items = [ "Comment Node", ExtResource( 12 ), false, "Start Node", ExtResource( 13 ), false, "End Node", ExtResource( 14 ), false ]
 script = ExtResource( 9 )
 
 [node name="HSeparator3" type="HSeparator" parent="Mount/MainWindow/Editor/Info/Nodes"]
-margin_top = 345.0
+margin_top = 389.0
 margin_right = 220.0
-margin_bottom = 349.0
+margin_bottom = 393.0
 custom_styles/separator = SubResource( 8 )
 
 [node name="Stats" type="VSplitContainer" parent="Mount/MainWindow/Editor/Info/Nodes"]
@@ -854,6 +849,9 @@ margin_right = 220.0
 margin_bottom = 514.0
 size_flags_vertical = 10
 dragger_visibility = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="Mount/MainWindow/Editor/Info/Nodes/Stats"]
 margin_right = 220.0
@@ -1115,149 +1113,6 @@ right_disconnects = true
 scroll_offset = Vector2( -5, -26 )
 script = ExtResource( 23 )
 
-[node name="Demo" type="Panel" parent="Mount/MainWindow/Editor/Graph"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 31.0
-margin_right = -5.0
-margin_bottom = -5.0
-custom_styles/panel = SubResource( 19 )
-script = ExtResource( 24 )
-speed = 2
-
-[node name="PlayField" type="Control" parent="Mount/MainWindow/Editor/Graph/Demo"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="NPC" type="Panel" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -60.892
-margin_top = -140.945
-margin_right = -3.89197
-margin_bottom = -83.9446
-custom_styles/panel = SubResource( 20 )
-
-[node name="attn" type="Sprite" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/NPC"]
-position = Vector2( 28.4531, -28.8561 )
-scale = Vector2( 0.201783, 0.201783 )
-texture = ExtResource( 25 )
-
-[node name="Area2D" type="Area2D" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/NPC"]
-position = Vector2( 26.4634, 24.2581 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/NPC/Area2D"]
-position = Vector2( 2.09503, 5.64336 )
-shape = SubResource( 21 )
-
-[node name="Player" type="Panel" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -144.869
-margin_top = 44.5054
-margin_right = -87.8693
-margin_bottom = 101.505
-custom_styles/panel = SubResource( 22 )
-
-[node name="Area2D2" type="Area2D" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player"]
-position = Vector2( 25.9418, 24.566 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player/Area2D2"]
-position = Vector2( 2.09503, 4.69334 )
-shape = SubResource( 21 )
-
-[node name="E" type="Button" parent="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player"]
-visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -44.2071
-margin_top = 8.45868
-margin_right = -10.2071
-margin_bottom = 42.4586
-text = "E"
-
-[node name="Keys" type="Control" parent="Mount/MainWindow/Editor/Graph/Demo"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="D" type="Button" parent="Mount/MainWindow/Editor/Graph/Demo/Keys"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -46.0
-margin_top = -47.0
-margin_right = -12.0
-margin_bottom = -13.0
-
-[node name="Label" type="Label" parent="Mount/MainWindow/Editor/Graph/Demo/Keys/D"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "D"
-align = 1
-valign = 1
-
-[node name="S" type="Button" parent="Mount/MainWindow/Editor/Graph/Demo/Keys"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -84.1062
-margin_top = -47.0
-margin_right = -50.1062
-margin_bottom = -13.0
-
-[node name="Label" type="Label" parent="Mount/MainWindow/Editor/Graph/Demo/Keys/S"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "S"
-align = 1
-valign = 1
-
-[node name="W" type="Button" parent="Mount/MainWindow/Editor/Graph/Demo/Keys"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -84.1062
-margin_top = -85.0
-margin_right = -50.1062
-margin_bottom = -51.0
-
-[node name="Label" type="Label" parent="Mount/MainWindow/Editor/Graph/Demo/Keys/W"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "W"
-align = 1
-valign = 1
-
-[node name="A" type="Button" parent="Mount/MainWindow/Editor/Graph/Demo/Keys"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -122.475
-margin_top = -47.0
-margin_right = -88.4751
-margin_bottom = -13.0
-
-[node name="Label" type="Label" parent="Mount/MainWindow/Editor/Graph/Demo/Keys/A"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "A"
-align = 1
-valign = 1
-
-[node name="Dialogue" parent="Mount/MainWindow/Editor/Graph/Demo" instance=ExtResource( 26 )]
-
 [connection signal="confirmed" from="Mount/Modals/QuitConf" to="Mount/MainWindow/MenuBar/Menus" method="_on_QuitConf_confirmed"]
 [connection signal="pressed" from="Mount/Modals/About/source" to="Mount/MainWindow/MenuBar/Menus" method="_on_source_pressed"]
 [connection signal="confirmed" from="Mount/Modals/New" to="Mount/MainWindow/Editor/Graph/Dialogue Graph" method="_on_New_confirmed"]
@@ -1295,18 +1150,5 @@ valign = 1
 [connection signal="focus_entered" from="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container/item_template/LineEdit" to="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container" method="_on_LineEdit_focus_entered"]
 [connection signal="focus_exited" from="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container/item_template/LineEdit" to="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container" method="_on_LineEdit_focus_exited"]
 [connection signal="text_changed" from="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container/item_template/LineEdit" to="Mount/MainWindow/Editor/Info/Info/DocVars/ScrollContainer/Container" method="_on_LineEdit_text_changed"]
-[connection signal="tab_selected" from="Mount/MainWindow/Editor/Graph" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_Graph_tab_selected"]
 [connection signal="connection_request" from="Mount/MainWindow/Editor/Graph/Dialogue Graph" to="Mount/MainWindow/Editor/Graph/Dialogue Graph" method="_on_Dialogue_Graph_connection_request"]
 [connection signal="disconnection_request" from="Mount/MainWindow/Editor/Graph/Dialogue Graph" to="Mount/MainWindow/Editor/Graph/Dialogue Graph" method="_on_Dialogue_Graph_disconnection_request"]
-[connection signal="area_entered" from="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player/Area2D2" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_Area2D2_area_entered"]
-[connection signal="area_exited" from="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player/Area2D2" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_Area2D2_area_exited"]
-[connection signal="button_down" from="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player/E" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_E_button_down"]
-[connection signal="button_up" from="Mount/MainWindow/Editor/Graph/Demo/PlayField/Player/E" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_E_button_up"]
-[connection signal="button_down" from="Mount/MainWindow/Editor/Graph/Demo/Keys/D" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_D_button_down"]
-[connection signal="button_up" from="Mount/MainWindow/Editor/Graph/Demo/Keys/D" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_D_button_up"]
-[connection signal="button_down" from="Mount/MainWindow/Editor/Graph/Demo/Keys/S" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_S_button_down"]
-[connection signal="button_up" from="Mount/MainWindow/Editor/Graph/Demo/Keys/S" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_S_button_up"]
-[connection signal="button_down" from="Mount/MainWindow/Editor/Graph/Demo/Keys/W" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_W_button_down"]
-[connection signal="button_up" from="Mount/MainWindow/Editor/Graph/Demo/Keys/W" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_W_button_up"]
-[connection signal="button_down" from="Mount/MainWindow/Editor/Graph/Demo/Keys/A" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_A_button_down"]
-[connection signal="button_up" from="Mount/MainWindow/Editor/Graph/Demo/Keys/A" to="Mount/MainWindow/Editor/Graph/Demo" method="_on_A_button_up"]

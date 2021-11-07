@@ -10,8 +10,7 @@ func _ready():
 	get_node("../../../../Modals/Save").connect("file_selected", self, "_save_whiskers")
 	get_node("../../../../Modals/Open").connect("file_selected", self, "pre_open")
 	get_node("../../../../Modals/Import").connect("file_selected", self, "_import_singleton")
-	
-	get_node("../Demo/Dialogue/Text").parse_bbcode("You haven't loaded anything yet! Press [b]Update Demo[/b] to load your current graph!")
+
 
 func get_connections(name):
 	var list = get_connection_list()
@@ -70,6 +69,9 @@ func _on_BasicNodes_item_activated(index):
 		init_scene("Option.tscn", false)
 	if(index == 2):
 		init_scene("Jump.tscn", false)
+	if(index == 3):
+		init_scene("Data.tscn", false)
+	
 
 func _on_AdvancedNodes_item_activated(index):
 	if(index == 0):
@@ -98,6 +100,7 @@ func init_scene(e, location):
 	get_node("./").add_child(node)
 	node.set_offset(offset)
 	node.set_name(node.get_name().replace('@', ''))
+	
 	lastNodePosition = node.get_offset()
 	
 	#history management
@@ -110,6 +113,28 @@ func init_scene(e, location):
 	
 	return node.name
 
+
+func load_node(type, name, node_data):
+	var scene = load("res://Scenes/Nodes/"+type)
+	var node = scene.instance()
+
+	get_node("./").add_child(node)
+
+	# load editor stuff
+	var editor_data = node_data.get("editor_data")
+	if editor_data:
+		var location = str(editor_data["location"]).replace('(','').replace(')','').split(',')
+		var size = editor_data["size"].split(',')
+
+		node.set_offset(Vector2(location[0], location[1]))
+		node.rect_size = Vector2(size[2], size[3])
+
+	node.set_name(name)
+	node.set_text(node_data["text"])
+	node.set_node_data(node_data["node_data"])
+
+
+"""
 func load_node(type, location, name, text, size):
 	var scene = load("res://Scenes/Nodes/"+type)
 	var node = scene.instance()
@@ -119,15 +144,17 @@ func load_node(type, location, name, text, size):
 	node.set_offset(Vector2(location[0], location[1]))
 	node.set_name(name)
 	if text:
-		node.get_node('Lines').get_child(0).set_text(text)
+		node.set_text(text)
 	if size:
 		size = size.split(',')
 		node.rect_size = Vector2(size[2], size[3])
 	
 	EditorSingleton.update_stats(name, '1')
+"""
 
 #=======> SAVING
 var data = {} # this is the final data, an array of all nodes that we write to file
+
 func process_data():
 	var connectionList = get_connection_list()
 	# We should save our 'info' tab data!
@@ -202,18 +229,59 @@ func process_data():
 		# save this in our processed object
 		data[name] = tempData
 
+
+func serialize():
+	var save_data = {
+		"info": {
+			"name": get_node("../../Info/Info/Name/Input").get_text(),
+			"display_name": get_node("../../Info/Info/DName/Input").get_text(),
+			"version": ""
+		},
+		"nodes": {}
+	}
+	
+	var nodes = save_data["nodes"]
+
+	# save all nodes
+	for node in get_node("./").get_children():
+		if not node is BaseGraphNode:
+			continue
+		
+		nodes[node.name] = node.serialize()
+		
+	# add connections to nodes
+	for conn in get_connection_list():
+		var from = { "name": conn["from"], "port": conn["from_port"] }
+		var to = { "name": conn["to"], "port": conn["to_port"] }
+
+		var node_to_input = nodes[to["name"]]["connections"]["input"]
+		var node_from_output = nodes[from["name"]]["connections"]["output"]
+
+		node_to_input[to["port"]] = from
+		node_from_output[from["port"]] = to
+	
+	return save_data
+
+
+func node_has_connection(node):
+	for conn in get_connection_list():
+		if conn.from == node.name or conn.to == node.name:
+			return true
+	return false
+
+
 func _save_whiskers(path):
-	process_data()
 	# write the file
 	print('saving file to: ', path)
 	var saveFile = File.new()
 	saveFile.open(path, File.WRITE)
-	saveFile.store_line(to_json(data))
+	saveFile.store_line(to_json(serialize()))
 	saveFile.close()
 	# clear our data node
 	data = {}
 	EditorSingleton.last_save = EditorSingleton.current_history
 	EditorSingleton.update_tab_title(false)
+
 
 #======> Open file
 func _open_whiskers(path):
@@ -221,43 +289,35 @@ func _open_whiskers(path):
 	var file = File.new()
 	file.open(path, File.READ)
 	var loadData = parse_json(file.get_as_text())
-	var nodeDataKeys = loadData.keys()
+	#var nodeDataKeys = loadData.keys()
 	# we should restore our `info` tab data!
 	get_node("../../Info/Info/DName/Input").set_text(loadData['info']['display_name'])
 	get_node("../../Info/Info/Name/Input").set_text(loadData['info']['name'])
+	
+	var nodes = loadData["nodes"]
+
 	# we should load our GraphNodes!
-	for i in range(0, nodeDataKeys.size()):
-		var type
-		var node = loadData[nodeDataKeys[i]]
-		var node_names = EditorSingleton.node_names
-		for x in range(0, node_names.size()):
-			if node_names[x] in nodeDataKeys[i]:
-				type = str(node_names[x])+'.tscn'
-		if type:
-			var size = false
-			if 'size' in node:
-				size = node['size']
-			load_node(type, node['location'], nodeDataKeys[i], node['text'], size)
+	for node_name in nodes:
+		var node_data = nodes[node_name]
+		
+		for name in EditorSingleton.node_names:
+			if not name in node_name:
+				continue
+
+			var type = str(name)+'.tscn'
+					
+			load_node(type, node_name, node_data)
+			break
 	
-	#everything has been loaded and added to the graph, lets connect them all!
-	for i in range(0, nodeDataKeys.size()):
-		if not 'info' in nodeDataKeys[i]:
-			var connectTo
-			if 'Condition' in nodeDataKeys[i]:
-				connectTo = loadData[nodeDataKeys[i]]['conditions']
-				# this is bad because it assumes `true` and `false` can *only* connect to one node
-				# this is a dumb assumption to make, and should be corrected soon:tm:
-				connect_node(nodeDataKeys[i], 0, connectTo['true'], 0) 
-				connect_node(nodeDataKeys[i], 1, connectTo['false'], 0) 
-			else:
-				connectTo = loadData[nodeDataKeys[i]]['connects_to']
-				# for each key
-				for x in range(0, connectTo.size()):
-					if 'Expression' in nodeDataKeys[i]:
-						connect_node(nodeDataKeys[i], 0, connectTo[x], 1)
-					else:
-						connect_node(nodeDataKeys[i], 0, connectTo[x], 0)
-	
+	# connect node in- and outputs
+	for node_name in nodes:
+		var node = nodes[node_name]
+		var output_slots = node["connections"]["output"]
+
+		for slot in output_slots:
+			var to = output_slots[slot]
+			connect_node(node_name, int(slot), to["name"], to["port"])
+
 	var startOffset = self.get_node('Start').offset
 	var graphRect = self.rect_size
 	var startRect = self.get_node('Start').rect_size
@@ -266,6 +326,8 @@ func _open_whiskers(path):
 	self.set_scroll_ofs(scrollTo)
 	self.set_scroll_ofs(scrollTo)
 	EditorSingleton.has_graph = true
+	
+
 
 #=== NEW FILE handling
 func _on_New_confirmed():
@@ -283,11 +345,11 @@ func clear_graph():
 	get_node("../../Info/Nodes/Stats/PanelContainer/StatsCon/DNodes/Amount").set_text('0')
 	EditorSingleton.last_save = 0
 	EditorSingleton.update_tab_title(false)
-	get_node("../Demo/Dialogue").reset()
-	get_node("../Demo/Dialogue").data = {}
+	#get_node("../Demo/Dialogue").reset()
+	#get_node("../Demo/Dialogue").data = {}
 	EditorSingleton.has_graph = false
 	data = {}
-	get_node("../Demo/Dialogue/Text").parse_bbcode("You haven't loaded anything yet! Press [b]Update Demo[/b] to load your current graph!")
+	#get_node("../Demo/Dialogue/Text").parse_bbcode("You haven't loaded anything yet! Press [b]Update Demo[/b] to load your current graph!")
 	# we should restore our `info` tab data!
 	get_node("../../Info/Info/DName/Input").set_text('')
 	get_node("../../Info/Info/Name/Input").set_text('')
