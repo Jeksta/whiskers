@@ -44,7 +44,7 @@ func _on_Node_raise_request():
 
 
 func _serialize(type):
-	return {
+	var data = {
 		"type": type,
 		"text": get_text(),
 		"node_data": get_node_data(),
@@ -59,22 +59,22 @@ func _serialize(type):
 		}
 	}
 
-
-func serialize():
-	var data = ._serialize("base")
 	var slot_count = get_child_count()
 
 	var connections = data["connections"]
 
 	for slot in range(slot_count):
 		if is_slot_enabled_left(slot):
-			connections["input"][slot] = {}
+			connections["input"][slot] = []
 		
 		if is_slot_enabled_right(slot):
-			connections["output"][slot] = {}
-	
+			connections["output"][slot] = []
+
 	return data
 
+
+func serialize():
+	return ._serialize("base")
 
 
 func set_node_data(data):

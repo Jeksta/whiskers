@@ -257,8 +257,11 @@ func serialize():
 		var node_to_input = nodes[to["name"]]["connections"]["input"]
 		var node_from_output = nodes[from["name"]]["connections"]["output"]
 
-		node_to_input[to["port"]] = from
-		node_from_output[from["port"]] = to
+		print(conn["from"], " ", node_from_output)
+		print(conn["to"], " ", node_to_input)
+
+		node_to_input[to["port"]].append(from)
+		node_from_output[from["port"]].append(to)
 	
 	return save_data
 
@@ -315,8 +318,11 @@ func _open_whiskers(path):
 		var output_slots = node["connections"]["output"]
 
 		for slot in output_slots:
-			var to = output_slots[slot]
-			connect_node(node_name, int(slot), to["name"], to["port"])
+			var to_outputs = output_slots[slot]
+
+			# add multi output
+			for out in to_outputs:
+				connect_node(node_name, int(slot), out["name"], out["port"])
 
 	var startOffset = self.get_node('Start').offset
 	var graphRect = self.rect_size

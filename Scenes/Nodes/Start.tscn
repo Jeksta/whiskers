@@ -36,6 +36,9 @@ slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LineEdit" type="Label" parent="."]
 margin_left = 10.0
