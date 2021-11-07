@@ -32,4 +32,5 @@ There are lots of awesome Dialogue creation tools out there, but I like a good c
 #### Changes:
 * Code generalization (should make it easier to add new nodes)
 * Output structure
+
 ![Media](/output_structure.png)
