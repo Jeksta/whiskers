@@ -13,7 +13,7 @@ Whiskers is an Open Source, visual Dialogue editor made using Godot.
 # How do I use this?
 We've included a few example projects in `/examples` to get you started! Play around with them to understand what each node does, and how they interact with each-other!
 
-It is ***very*** important that you connect ***all*** dead-end nodes to an `End` node! Or else your dialogue asset won't save properly and it'll run into issues while parsing! This can cause you to ***lose all unsaved progress!***
+~~It is ***very*** important that you connect ***all*** dead-end nodes to an `End` node! Or else your dialogue asset won't save properly and it'll run into issues while parsing! This can cause you to ***lose all unsaved progress!***~~
 
 This project is still being developed, and you *will* encounter bugs! Please be sure to report all issues to this Repository so we can get them fixed ASAP!
 
