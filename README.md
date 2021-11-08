@@ -31,9 +31,11 @@ Please follow the [GDScript Style Guide](https://docs.godotengine.org/en/3.0/get
 There are lots of awesome Dialogue creation tools out there, but I like a good challenge! Creating this tool taught me a *lot* about Godot. Having created my own solution also means that I can add new Features much quicker than if I was using a third-party one!
 
 # Fork additions and changes
-#### Changes:
-* Code generalization (should make it easier to add new nodes)
-* Output structure
+* Code generalization / Node inheritance (should make it easier to add new nodes).
+* Option Node can hold multiple options and adds one output for each option.
+* Graph can only hold one Start Node (similar to a main).
+* Each output can only connect to one input (no limitation for inputs) to make the graph strong directional.
+* Changed Export structure
 
 ![Media](/output_structure.png)
 >>>>>>> cff8e711ac95039dee359521b3fecbb74a06cf23
