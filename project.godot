@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://Scripts/Nodes/BaseGraphNode.gd"
 }, {
 "base": "Reference",
+"class": "WhiskersDialogue",
+"language": "GDScript",
+"path": "res://Parser/WhiskersDialogue.gd"
+}, {
+"base": "Reference",
 "class": "WhiskersParser",
 "language": "GDScript",
-"path": "res://Scripts/WhiskersParser.gd"
+"path": "res://Parser/WhiskersParser.gd"
 } ]
 _global_script_class_icons={
 "BaseGraphNode": "",
+"WhiskersDialogue": "",
 "WhiskersParser": ""
 }
 

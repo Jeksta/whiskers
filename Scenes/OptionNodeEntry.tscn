@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Assets/Themes/Nodes/Normal/line.tres" type="StyleBox" id=1]
+
+[node name="VBoxContainer" type="VBoxContainer"]
+margin_left = 109.0
+margin_right = 331.0
+margin_bottom = 24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Entry" type="HBoxContainer" parent="."]
+margin_right = 222.0
+margin_bottom = 24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="Entry"]
+margin_right = 199.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+custom_styles/focus = ExtResource( 1 )
+custom_styles/normal = ExtResource( 1 )
+placeholder_text = "Player Option"
+
+[node name="DeleteButton" type="Button" parent="Entry"]
+margin_left = 203.0
+margin_right = 222.0
+margin_bottom = 24.0
+text = "x"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 28.0
+margin_right = 222.0
+margin_bottom = 32.0

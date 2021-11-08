@@ -6,11 +6,13 @@ var format_dictionary : Dictionary = {} setget set_format_dictionary
 var default_base_instance : Object # Default base instance defined at _init method
 var base_instance : Object # Object used as a base instance when running expressions
 
+
 func _init(base_instance : Object = null):
 	default_base_instance = base_instance
 	
 	if not base_instance:
 		print("[WARN]: no base_instance for calling expressions.")
+
 
 static func open_whiskers(file_path : String) -> Dictionary:
 	var file = File.new()
@@ -27,10 +29,12 @@ static func open_whiskers(file_path : String) -> Dictionary:
 		print("[ERROR]: failed to parse whiskers file. Is it a valid exported whiskers file?")
 		return {}
 	
-	return dialogue_data
+	return dialogue_data["nodes"]
+
 
 static func parse_whiskers(data : Dictionary) -> Dictionary:
 	return data
+
 
 func start_dialogue(dialogue_data : Dictionary, custom_base_instance : Object = null) -> Dictionary:
 	if not dialogue_data.has("Start"):
@@ -43,10 +47,12 @@ func start_dialogue(dialogue_data : Dictionary, custom_base_instance : Object = 
 	
 	return current_block
 
+
 func end_dialogue() -> void:
 	data = {}
 	current_block = {}
 	base_instance = default_base_instance
+
 
 func next(selected_option_key : String = "") -> Dictionary:
 	if not data:
@@ -81,6 +87,7 @@ func next(selected_option_key : String = "") -> Dictionary:
 	
 	return current_block
 
+
 func process_block(block : Dictionary) -> Dictionary:
 	var next_block = {}
 	
@@ -95,6 +102,7 @@ func process_block(block : Dictionary) -> Dictionary:
 	
 	return next_block
 
+
 func handle_expressions(expressions_array : Array) -> Array:
 	if expressions_array.empty(): return []
 	
@@ -105,6 +113,7 @@ func handle_expressions(expressions_array : Array) -> Array:
 		results.append(execute_expression(dic.logic))
 	
 	return results
+
 
 func handle_condition(condition : Dictionary) -> Dictionary:
 	var result = execute_expression(condition.logic)
@@ -122,6 +131,7 @@ func handle_condition(condition : Dictionary) -> Dictionary:
 			next_block = generate_block(condition.goes_to_key.if_false)
 	
 	return next_block
+
 
 func handle_jump(jump) -> Dictionary:
 	# Get the matching node to wich we are going
@@ -142,6 +152,7 @@ func handle_jump(jump) -> Dictionary:
 	
 	return next_block
 
+
 func execute_expression(expression_text : String):
 	var expression = Expression.new()
 	var result = null
@@ -155,6 +166,7 @@ func execute_expression(expression_text : String):
 			print("[ERROR]: unable to execute expression %s." % expression_text)
 	
 	return result
+
 
 # A block is a Dictionary containing a node and every node it is connected to, by type and it's informations.
 func generate_block(node_key : String) -> Dictionary:
@@ -262,6 +274,7 @@ func generate_block(node_key : String) -> Dictionary:
 	current_block = block
 	return current_block
 
+
 func process_condition(passed_key : String) -> Dictionary:
 	# Sadly the only way to find the Expression node that serves as input is to make a linear search
 	var input_logic : String
@@ -284,6 +297,7 @@ func process_condition(passed_key : String) -> Dictionary:
 			}
 	
 	return condition
+
 
 func set_format_dictionary(value : Dictionary) -> void:
 	format_dictionary = value

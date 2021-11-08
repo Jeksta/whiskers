@@ -79,11 +79,6 @@ func _input(event : InputEvent) -> void:
 					menu_help.hide()
 					menu_edit.hide()
 
-func update_demo() -> void:
-	if has_graph:
-		get_node("/root/Editor/Mount/MainWindow/Editor/Graph/Dialogue Graph").process_data()
-		get_node("/root/Editor/Mount/MainWindow/Editor/Graph/Demo/Dialogue").data = get_node("/root/Editor/Mount/MainWindow/Editor/Graph/Dialogue Graph").data
-
 #===== History Management
 func overwrite_history() -> void:
 	if current_history > 0:
@@ -115,7 +110,10 @@ func undo_history() -> void:
 		
 		print(action)
 		if action == 'remove':
-			graph.load_node(object['node']+'.tscn', object['offset'], object['name'], object['text'], false)
+			# TODO: remove undo is broken
+			#graph.load_node(object['node']+'.tscn', object['offset'], object['name'], object['text'], false)
+			print(object)
+			#graph.load_node(object['node']+'.tscn', object['name'], null)
 		if action == 'move':
 			if last_instance_of(object['name']):
 				var last_instance = history_objects[last_instance_of(object['name'])]

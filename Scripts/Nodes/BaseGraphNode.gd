@@ -10,8 +10,7 @@ func _ready():
 
 func _on_Node_close_request():
 	self.queue_free()
-	print('removing node')
-	print(get_type(self.name))
+	print('removing node ' + name)
 	EditorSingleton.update_stats(self.name, '-1')
 	EditorSingleton.add_history(get_type(self.name), self.name, self.get_offset(), get_text(), get_node('../').get_connections(self.name), 'remove')
 
@@ -60,7 +59,6 @@ func _serialize(type):
 	}
 
 	var slot_count = get_child_count()
-
 	var connections = data["connections"]
 
 	for slot in range(slot_count):
@@ -84,7 +82,7 @@ func set_node_data(data):
 func get_node_data():
 	return {
 		"type": "none",
-		"data": {}
+		"data": {},
 	}
 
 

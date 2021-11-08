@@ -6,6 +6,7 @@ var preFire = false
 var timer = 0
 var path = ''
 
+
 func _ready():
 	get_node("../../../../Modals/Save").connect("file_selected", self, "_save_whiskers")
 	get_node("../../../../Modals/Open").connect("file_selected", self, "pre_open")
@@ -41,10 +42,12 @@ func _physics_process(delta):
 		open = false
 		timer = 0
 
+
 func pre_open(openPath):
 	path = openPath
 	open = true
 	preFire = true
+
 
 func get_text(from):
 	if self.get_node(from).has_node('Lines'):
@@ -52,15 +55,28 @@ func get_text(from):
 	else:
 		return ''
 
+
 func _on_Dialogue_Graph_connection_request(from, from_slot, to, to_slot):
+	# restrict outputs to just one input
+	for conn in get_connection_list():
+		var conn_from = conn.get("from", "None")
+		var conn_from_slot = conn.get("from_port", -1)
+		
+		print(conn_from, " ", from, " ", conn_from_slot, " ", from_slot)
+		if conn_from == from and conn_from_slot == from_slot:
+			print("Can't connect an output to multiple inputs")
+			return
+	
 	connect_node(from, from_slot, to, to_slot)
 	var type = EditorSingleton.get_node_type(to)
 	EditorSingleton.add_history(type, to, self.get_node(to).get_offset(), get_text(to), get_connections(to), 'connect')
+
 
 func _on_Dialogue_Graph_disconnection_request(from, from_slot, to, to_slot):
 	disconnect_node(from, from_slot, to, to_slot)
 	var type = EditorSingleton.get_node_type(to)
 	EditorSingleton.add_history(type, to, self.get_node(to).get_offset(), get_text(to), get_connections(to), 'disconnect')
+
 
 func _on_BasicNodes_item_activated(index):
 	if(index == 0):
@@ -79,15 +95,31 @@ func _on_AdvancedNodes_item_activated(index):
 	if(index == 1):
 		init_scene("Expression.tscn", false)
 
+
 func _on_UtilityNodes_item_activated(index):
-	if(index == 0):
-		init_scene("Comment.tscn", false)
-	if(index == 1):
-		init_scene("Start.tscn", false)
-	if(index == 2):
-		init_scene("End.tscn", false)
+	match(index):
+		0:
+			init_scene("Comment.tscn", false)
+		1:
+			init_scene("Start.tscn", false)
+		2:
+			init_scene("End.tscn", false)
+
+
+func has_start_node():
+	for node in get_children():
+		if "Start" in node.name:
+			return true
+	return false
+
 
 func init_scene(e, location):
+	# every graph has only one start node
+	if e == "Start.tscn":
+		if has_start_node():
+			print("Graph already has a Start node.")
+			return
+	
 	var scene = load("res://Scenes/Nodes/"+e)
 	var node = scene.instance()
 	var offset
@@ -134,102 +166,6 @@ func load_node(type, name, node_data):
 	node.set_node_data(node_data["node_data"])
 
 
-"""
-func load_node(type, location, name, text, size):
-	var scene = load("res://Scenes/Nodes/"+type)
-	var node = scene.instance()
-	
-	get_node("./").add_child(node)
-	location = str(location).replace('(','').replace(')','').split(',')
-	node.set_offset(Vector2(location[0], location[1]))
-	node.set_name(name)
-	if text:
-		node.set_text(text)
-	if size:
-		size = size.split(',')
-		node.rect_size = Vector2(size[2], size[3])
-	
-	EditorSingleton.update_stats(name, '1')
-"""
-
-#=======> SAVING
-var data = {} # this is the final data, an array of all nodes that we write to file
-
-func process_data():
-	var connectionList = get_connection_list()
-	# We should save our 'info' tab data!
-	data['info'] = {
-		'name': get_node("../../Info/Info/Name/Input").get_text(),
-		'display_name': get_node("../../Info/Info/DName/Input").get_text(),
-	}
-	# lets save our GraphNodes!
-	for i in range(0, connectionList.size()):
-		var name = connectionList[i].from
-		# Our schema
-		var tempData = {
-				'text':"",
-				'connects_to':[],
-				'logic':"",
-				'conditions':{
-					'true':'',
-					'false':''
-				},
-				'location':"",
-				'size':""
-		}
-		var currentCTSize = 0
-		var currentConnectsTo 
-		if name in data:
-			currentCTSize = data[name]['connects_to'].size()
-			currentConnectsTo = data[name]['connects_to']
-		
-		# are we a node with a text field?
-		if ('Dialogue' in name) or ('Option' in name) or ('Expression' in name) or ('Jump' in name) or ('Comment' in name):
-			tempData['text'] = self.get_node(name).get_node('Lines').get_child(0).get_text()
-		
-		# are we an Expression Node? We should store the value in our logic field
-		if ('Expression' in name):
-			tempData['logic'] = self.get_node(name).get_node('Lines').get_child(0).get_text()
-		
-		if ('Condition' in name):
-			var routes
-			if name in data:
-				routes = data[name]['conditions']
-			if connectionList[i]['from_port'] == 0:
-				tempData['conditions']['true'] = connectionList[i].to
-				if (routes) and (routes['false']):
-					tempData['conditions']['false'] = routes['false']
-			if connectionList[i]['from_port'] == 1:
-				tempData['conditions']['false'] = connectionList[i].to
-				if (routes) and (routes['true']):
-					tempData['conditions']['true'] = routes['true']
-		else:
-			if currentConnectsTo:
-				tempData['connects_to'] = currentConnectsTo
-			if not connectionList[i].to in tempData['connects_to']:
-				tempData['connects_to'].append(connectionList[i].to)
-		
-		# store our location
-		tempData['location'] = self.get_node(name).get_offset()
-		
-		# store our size
-		tempData['size'] = self.get_node(name).get_rect() 
-		
-		# are we connecting to an 'End' node?
-		if 'End' in connectionList[i].to:
-			# we should store the data!
-			data[connectionList[i].to] = {
-					'text':"",
-					'connects_to':{},
-					'logic':"",
-					'conditions':{},
-					'location':self.get_node(connectionList[i].to).get_offset()
-			}
-		
-		# save this in our processed object
-		data[name] = tempData
-
-
 func serialize():
 	var save_data = {
 		"info": {
@@ -251,14 +187,17 @@ func serialize():
 		
 	# add connections to nodes
 	for conn in get_connection_list():
-		var from = { "name": conn["from"], "port": conn["from_port"] }
-		var to = { "name": conn["to"], "port": conn["to_port"] }
+		var from = { 
+			"name": conn["from"], 
+			"port": conn["from_port"] 
+		}
+		var to = { 
+			"name": conn["to"], 
+			"port": conn["to_port"] 
+		}
 
 		var node_to_input = nodes[to["name"]]["connections"]["input"]
 		var node_from_output = nodes[from["name"]]["connections"]["output"]
-
-		print(conn["from"], " ", node_from_output)
-		print(conn["to"], " ", node_to_input)
 
 		node_to_input[to["port"]].append(from)
 		node_from_output[from["port"]].append(to)
@@ -281,7 +220,6 @@ func _save_whiskers(path):
 	saveFile.store_line(to_json(serialize()))
 	saveFile.close()
 	# clear our data node
-	data = {}
 	EditorSingleton.last_save = EditorSingleton.current_history
 	EditorSingleton.update_tab_title(false)
 
@@ -292,7 +230,7 @@ func _open_whiskers(path):
 	var file = File.new()
 	file.open(path, File.READ)
 	var loadData = parse_json(file.get_as_text())
-	#var nodeDataKeys = loadData.keys()
+	file.close()
 	# we should restore our `info` tab data!
 	get_node("../../Info/Info/DName/Input").set_text(loadData['info']['display_name'])
 	get_node("../../Info/Info/Name/Input").set_text(loadData['info']['name'])
@@ -354,7 +292,6 @@ func clear_graph():
 	#get_node("../Demo/Dialogue").reset()
 	#get_node("../Demo/Dialogue").data = {}
 	EditorSingleton.has_graph = false
-	data = {}
 	#get_node("../Demo/Dialogue/Text").parse_bbcode("You haven't loaded anything yet! Press [b]Update Demo[/b] to load your current graph!")
 	# we should restore our `info` tab data!
 	get_node("../../Info/Info/DName/Input").set_text('')

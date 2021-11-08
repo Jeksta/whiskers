@@ -24,7 +24,7 @@ size_flags_horizontal = 3
 
 [node name="Key" type="LineEdit" parent="Data"]
 visible = false
-margin_right = 98.0
+margin_right = 91.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 custom_styles/focus = ExtResource( 1 )
